@@ -4,6 +4,9 @@ const bodyParser = require('body-parser');
 
 const app = express();
 
+app.set('view engine', 'pug'); // Compile dynamic templates with Pug.
+app.set('views', 'views'); // Sets the location of the templates.
+
 const adminData = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
 
