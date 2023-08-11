@@ -1,10 +1,12 @@
 const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
+const expressHbs = require('express-handlebars');
 
 const app = express();
 
-app.set('view engine', 'pug'); // Compile dynamic templates with Pug.
+app.engine('hbs', expressHbs());
+app.set('view engine', 'hbs'); // Compile dynamic templates.
 app.set('views', 'views'); // Sets the location of the templates.
 
 const adminData = require('./routes/admin');
