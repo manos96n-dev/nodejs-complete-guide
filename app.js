@@ -11,7 +11,7 @@ const adminData = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
 
 app.use(bodyParser.urlencoded({ extended: false })); // Extracts the data from the form when submit.
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public'))); // Sets the public folder for statics files.
 
 app.use('/admin', adminData.routes);
 app.use(shopRoutes);
