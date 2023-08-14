@@ -17,6 +17,17 @@ app.set('views', 'views'); // Sets the location of the templates.
 app.use(bodyParser.urlencoded({ extended: false })); // Extracts the data from the form when submit.
 app.use(express.static(path.join(__dirname, 'public'))); // Sets the public folder for statics files.
 
+app.use((req, res, next) => {
+  User.findByPk(1)
+    .then((user) => {
+      req.user = user;
+      next();
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+});
+
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);
 
@@ -27,9 +38,18 @@ Product.belongsTo(User, { constraints: true, onDelete: 'CASCADE' });
 User.hasMany(Product);
 
 sequelize
-  .sync({ force: true })
+  //   .sync({ force: true }) // Recreating the db every time where run
+  .sync()
   .then((result) => {
-    // console.log(result);
+    return User.findByPk(1);
+  })
+  .then((user) => {
+    if (!user) {
+      return User.create({ name: 'Manos', email: 'test@test.com' });
+    }
+    return user;
+  })
+  .then((user) => {
     app.listen(3000);
   })
   .catch((err) => {
