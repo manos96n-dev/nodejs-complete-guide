@@ -17,17 +17,31 @@ exports.getProducts = (req, res) => {
 
 exports.getProduct = (req, res) => {
   const prodId = req.params.productId;
-  Product.findById(prodId)
-    .then(([product]) => {
+  // Solution 1
+  Product.findByPk(prodId)
+    .then((product) => {
       res.render('shop/product-detail', {
         pageTitle: product.title,
-        product: product[0],
+        product: product,
         path: '/products',
       });
     })
     .catch((err) => {
       console.log(err);
     });
+
+  // Solution 2
+  // Product.findAll({ where: { id: prodId } })
+  //   .then((products) => {
+  //     res.render('shop/product-detail', {
+  //       product: products[0],
+  //       pageTitle: products[0].title,
+  //       path: '/products',
+  //     });
+  //   })
+  //   .catch((err) => {
+  //     console.log(err);
+  //   });
 };
 
 exports.getIndex = (req, res) => {
