@@ -43,7 +43,7 @@ exports.postAddProduct = (req, res) => {
     description: description,
   })
     .then((result) => {
-      console.log('Created Product');
+      res.redirect('/admin/products');
     })
     .catch((err) => {
       console.log(err);
@@ -62,7 +62,7 @@ exports.postEditProduct = (req, res) => {
       product.price = updatedPrice;
       product.description = updatedDesc;
       product.imageUrl = updatedImageUrl;
-      return product.save(); // save() function provided by sequelize
+      return product.save(); // Saves the edited product to the db
     })
     .then((result) => {
       res.redirect('/admin/products');
@@ -74,8 +74,16 @@ exports.postEditProduct = (req, res) => {
 
 exports.postDeleteProduct = (req, res) => {
   const prodId = req.body.productId;
-  Product.deleleById(prodId);
-  res.redirect('/admin/products');
+  Product.findByPk(prodId)
+    .then((product) => {
+      return product.destroy(); // Deletes the product from the db
+    })
+    .then((result) => {
+      res.redirect('/admin/products');
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };
 
 exports.getProducts = (req, res) => {
