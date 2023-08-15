@@ -1,7 +1,7 @@
 const Product = require('../models/product');
 
 exports.getProducts = (req, res) => {
-  Product.findAll()
+  Product.fetchAll()
     .then((products) => {
       res.render('shop/product-list', {
         prods: products,
@@ -44,12 +44,12 @@ exports.getProduct = (req, res) => {
 };
 
 exports.getIndex = (req, res) => {
-  Product.findAll()
+  Product.fetchAll()
     .then((products) => {
-      res.render('shop/product-list', {
+      res.render('shop/index', {
         prods: products,
         pageTitle: 'All Products',
-        path: '/products',
+        path: '/',
       });
     })
     .catch((err) => {
