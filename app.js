@@ -6,6 +6,7 @@ const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
 const errorController = require('./controllers/error');
 const mongoConnect = require('./utils/database').mongoConnect;
+const User = require('./models/user');
 
 const app = express();
 
@@ -16,6 +17,14 @@ app.use(bodyParser.urlencoded({ extended: false })); // Extracts the data from t
 app.use(express.static(path.join(__dirname, 'public'))); // Sets the public folder for statics files.
 
 app.use((req, res, next) => {
+  User.findById('64db7539ecd3f1b01d7a0b59')
+    .then((user) => {
+      req.user = user;
+      next();
+    })
+    .catch((err) => {
+      console.log(err);
+    });
   next();
 });
 
