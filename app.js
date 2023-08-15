@@ -19,7 +19,7 @@ app.use(express.static(path.join(__dirname, 'public'))); // Sets the public fold
 app.use((req, res, next) => {
   User.findById('64db7539ecd3f1b01d7a0b59')
     .then((user) => {
-      req.user = user;
+      req.user = new User(user.name, user.email, user.cart, user._id);
       next();
     })
     .catch((err) => {
