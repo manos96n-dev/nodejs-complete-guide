@@ -1,4 +1,5 @@
 const Product = require('../models/product');
+const Order = require('../models/order');
 
 exports.getProducts = (req, res) => {
   Product.find() // find provided from mongoose
@@ -83,7 +84,20 @@ exports.postCartDeleteProduct = (req, res) => {
 
 exports.postOrder = (req, res) => {
   req.user
-    .addOrder()
+    .populate('cart.items.productId')
+    .then((user) => {
+      const products = user.cart.items.map((item) => {
+        return { quantity: item.quantity, product: { ...item.productId._doc } };
+      });
+      const order = new Order({
+        user: {
+          name: req.user.name,
+          userId: req.user, // Mongoose automatically add the user's _id
+        },
+        products: products,
+      });
+      order.save();
+    })
     .then((result) => {
       res.redirect('/orders');
     })
