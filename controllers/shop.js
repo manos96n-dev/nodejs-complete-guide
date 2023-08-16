@@ -104,7 +104,3 @@ exports.getOrders = (req, res) => {
       console.log(err);
     });
 };
-
-exports.getCheckout = (req, res) => {
-  res.render('shop/checkout', { path: '/checkout', pageTitle: 'Checkout' });
-};
