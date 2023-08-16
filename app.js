@@ -3,6 +3,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const session = require('express-session');
+const MongoDBStore = require('connect-mongodb-session')(session);
 
 const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
@@ -10,15 +11,28 @@ const authRoutes = require('./routes/auth');
 const errorController = require('./controllers/error');
 const User = require('./models/user');
 
+const MONGODB_URI =
+  'mongodb+srv://manos96n:manol123@cluster0.sg2hi.mongodb.net/shop';
+
 const app = express();
+const store = new MongoDBStore({
+  uri: MONGODB_URI,
+  collection: 'sessions',
+});
 
 app.set('view engine', 'ejs'); // Compile dynamic templates.
 app.set('views', 'views'); // Sets the location of the templates.
 
 app.use(bodyParser.urlencoded({ extended: false })); // Extracts the data from the form when submit.
 app.use(express.static(path.join(__dirname, 'public'))); // Sets the public folder for statics files.
+// Initialize a session middleware
 app.use(
-  session({ secret: 'my secret', resave: false, saveUninitialized: false }) // Initialize a session middleware
+  session({
+    secret: 'my secret',
+    resave: false,
+    saveUninitialized: false,
+    store: store,
+  })
 );
 
 app.use((req, res, next) => {
@@ -39,7 +53,7 @@ app.use(authRoutes);
 app.use(errorController.get404);
 
 mongoose
-  .connect('mongodb+srv://manos96n:manol123@cluster0.sg2hi.mongodb.net/shop')
+  .connect(MONGODB_URI)
   .then((result) => {
     User.findOne().then((user) => {
       if (!user) {
