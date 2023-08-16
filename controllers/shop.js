@@ -8,7 +8,7 @@ exports.getProducts = (req, res) => {
         prods: products,
         pageTitle: 'All Products',
         path: '/products',
-        isAuthenticated: req.isLoggedIn,
+        isAuthenticated: req.session.isLoggedIn,
       });
     })
     .catch((err) => {
@@ -25,7 +25,7 @@ exports.getProduct = (req, res) => {
         product: product,
         pageTitle: product.title,
         path: '/products',
-        isAuthenticated: req.isLoggedIn,
+        isAuthenticated: req.session.isLoggedIn,
       });
     })
     .catch((err) => {
@@ -40,7 +40,7 @@ exports.getIndex = (req, res) => {
         prods: products,
         pageTitle: 'All Products',
         path: '/',
-        isAuthenticated: req.isLoggedIn,
+        isAuthenticated: req.session.isLoggedIn,
       });
     })
     .catch((err) => {
@@ -49,7 +49,7 @@ exports.getIndex = (req, res) => {
 };
 
 exports.getCart = (req, res) => {
-  req.user
+  req.session.user
     .populate('cart.items.productId')
     .then((user) => {
       const products = user.cart.items;
@@ -57,7 +57,7 @@ exports.getCart = (req, res) => {
         path: '/cart',
         pageTitle: 'Your Cart',
         products: products,
-        isAuthenticated: req.isLoggedIn,
+        isAuthenticated: req.session.isLoggedIn,
       });
     })
     .catch((err) => console.log(err));
@@ -67,7 +67,7 @@ exports.postCart = (req, res) => {
   const prodId = req.body.productId;
   Product.findById(prodId)
     .then((product) => {
-      return req.user.addToCart(product);
+      return req.session.user.addToCart(product);
     })
     .then((result) => {
       res.redirect('/cart');
@@ -76,7 +76,7 @@ exports.postCart = (req, res) => {
 
 exports.postCartDeleteProduct = (req, res) => {
   const prodId = req.body.productId;
-  req.user
+  req.session.user
     .removeFromCart(prodId)
     .then((result) => {
       res.redirect('/cart');
@@ -87,7 +87,7 @@ exports.postCartDeleteProduct = (req, res) => {
 };
 
 exports.postOrder = (req, res) => {
-  req.user
+  req.session.user
     .populate('cart.items.productId')
     .then((user) => {
       const products = user.cart.items.map((item) => {
@@ -95,15 +95,15 @@ exports.postOrder = (req, res) => {
       });
       const order = new Order({
         user: {
-          name: req.user.name,
-          userId: req.user, // Mongoose automatically add the user's _id
+          name: req.session.user.name,
+          userId: req.session.user, // Mongoose automatically add the user's _id
         },
         products: products,
       });
       order.save();
     })
     .then((result) => {
-      return req.user.clearCart();
+      return req.session.user.clearCart();
     })
     .then(() => {
       res.redirect('/orders');
@@ -112,13 +112,13 @@ exports.postOrder = (req, res) => {
 };
 
 exports.getOrders = (req, res) => {
-  Order.find({ 'user.userId': req.user._id })
+  Order.find({ 'user.userId': req.session.user._id })
     .then((orders) => {
       res.render('shop/orders', {
         path: '/orders',
         pageTitle: 'Your Orders',
         orders: orders,
-        isAuthenticated: req.isLoggedIn,
+        isAuthenticated: req.session.isLoggedIn,
       });
     })
     .catch((err) => {

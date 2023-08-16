@@ -25,6 +25,7 @@ app.set('views', 'views'); // Sets the location of the templates.
 
 app.use(bodyParser.urlencoded({ extended: false })); // Extracts the data from the form when submit.
 app.use(express.static(path.join(__dirname, 'public'))); // Sets the public folder for statics files.
+
 // Initialize a session middleware
 app.use(
   session({
@@ -34,17 +35,6 @@ app.use(
     store: store,
   })
 );
-
-app.use((req, res, next) => {
-  User.findById('64dc9ceddbaf6217b9320f87')
-    .then((user) => {
-      req.user = user;
-      next();
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-});
 
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);
