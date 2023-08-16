@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
 const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
 const errorController = require('./controllers/error');
-const User = require('./models/user');
+// const User = require('./models/user');
 
 const app = express();
 
@@ -16,16 +16,16 @@ app.set('views', 'views'); // Sets the location of the templates.
 app.use(bodyParser.urlencoded({ extended: false })); // Extracts the data from the form when submit.
 app.use(express.static(path.join(__dirname, 'public'))); // Sets the public folder for statics files.
 
-app.use((req, res, next) => {
-  User.findById('64db7539ecd3f1b01d7a0b59')
-    .then((user) => {
-      req.user = new User(user.name, user.email, user.cart, user._id);
-      next();
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-});
+// app.use((req, res, next) => {
+//   User.findById('64db7539ecd3f1b01d7a0b59')
+//     .then((user) => {
+//       req.user = new User(user.name, user.email, user.cart, user._id);
+//       next();
+//     })
+//     .catch((err) => {
+//       console.log(err);
+//     });
+// });
 
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);
@@ -33,7 +33,7 @@ app.use(shopRoutes);
 app.use(errorController.get404);
 
 mongoose
-  .connect('mongodb+srv://manos96n:manol123@cluster0.sg2hi.mongodb.net/')
+  .connect('mongodb+srv://manos96n:manol123@cluster0.sg2hi.mongodb.net/shop')
   .then((result) => {
     app.listen(3000);
   })
