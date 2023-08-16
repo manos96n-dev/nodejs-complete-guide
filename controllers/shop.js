@@ -17,7 +17,7 @@ exports.getProducts = (req, res) => {
 exports.getProduct = (req, res) => {
   const prodId = req.params.productId;
 
-  Product.findById(prodId)
+  Product.findById(prodId) // findById provided from mongoose
     .then((product) => {
       res.render('shop/product-detail', {
         product: product,
