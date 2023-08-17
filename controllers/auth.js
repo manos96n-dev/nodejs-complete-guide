@@ -93,6 +93,7 @@ exports.getSignup = (req, res) => {
       password: '',
       confirmPassword: '',
     },
+    validationErrors: [],
   });
 };
 
@@ -112,6 +113,7 @@ exports.postSignup = (req, res) => {
         password: password,
         confirmPassword: confirmPassword,
       },
+      validationErrors: errors.array(),
     });
   }
 
