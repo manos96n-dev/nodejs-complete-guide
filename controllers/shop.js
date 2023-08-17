@@ -94,7 +94,7 @@ exports.postOrder = (req, res) => {
       });
       const order = new Order({
         user: {
-          name: req.user.name,
+          email: req.user.email,
           userId: req.user, // Mongoose automatically add the user's _id
         },
         products: products,
