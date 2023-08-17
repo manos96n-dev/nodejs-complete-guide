@@ -148,7 +148,7 @@ exports.postReset = (req, res) => {
       .then((result) => {
         res.redirect('/');
         transporter.sendMail({
-          to: email,
+          to: req.body.email,
           from: 'manos1996n@gmail.com',
           subject: 'Password Reset',
           html: `
