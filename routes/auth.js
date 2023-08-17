@@ -11,11 +11,10 @@ router.get('/login', authController.getLogin);
 router.post(
   '/login',
   [
-    body('email').isEmail().withMessage('Please enter a valid email.'),
+    check('email').isEmail().withMessage('Please enter a valid email.'),
     body('password', 'Password has to be valid')
       .isLength({ min: 5 })
-      .isAlphanumeric()
-      .body('password'),
+      .isAlphanumeric(),
   ],
   authController.postLogin
 );
