@@ -2,7 +2,7 @@ const product = require('../models/product');
 const Product = require('../models/product');
 
 exports.getProducts = (req, res) => {
-  Product.find()
+  Product.find({ userId: req.user._id })
     .then((products) => {
       res.render('admin/products', {
         prods: products,
