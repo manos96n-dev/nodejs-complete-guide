@@ -1,7 +1,7 @@
 const Product = require('../models/product');
 const Order = require('../models/order');
 
-exports.getProducts = (req, res) => {
+exports.getProducts = (req, res, next) => {
   Product.find() // find provided from mongoose
     .then((products) => {
       res.render('shop/product-list', {
@@ -17,7 +17,7 @@ exports.getProducts = (req, res) => {
     });
 };
 
-exports.getProduct = (req, res) => {
+exports.getProduct = (req, res, next) => {
   const prodId = req.params.productId;
 
   Product.findById(prodId) // findById provided from mongoose
@@ -35,7 +35,7 @@ exports.getProduct = (req, res) => {
     });
 };
 
-exports.getIndex = (req, res) => {
+exports.getIndex = (req, res, next) => {
   Product.find() // find provided from mongoose
     .then((products) => {
       res.render('shop/index', {
@@ -51,7 +51,7 @@ exports.getIndex = (req, res) => {
     });
 };
 
-exports.getCart = (req, res) => {
+exports.getCart = (req, res, next) => {
   req.user
     .populate('cart.items.productId')
     .then((user) => {
@@ -69,7 +69,7 @@ exports.getCart = (req, res) => {
     });
 };
 
-exports.postCart = (req, res) => {
+exports.postCart = (req, res, next) => {
   const prodId = req.body.productId;
   Product.findById(prodId)
     .then((product) => {
@@ -77,10 +77,15 @@ exports.postCart = (req, res) => {
     })
     .then((result) => {
       res.redirect('/cart');
+    })
+    .catch((err) => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
     });
 };
 
-exports.postCartDeleteProduct = (req, res) => {
+exports.postCartDeleteProduct = (req, res, next) => {
   const prodId = req.body.productId;
   req.user
     .removeFromCart(prodId)
@@ -94,7 +99,7 @@ exports.postCartDeleteProduct = (req, res) => {
     });
 };
 
-exports.postOrder = (req, res) => {
+exports.postOrder = (req, res, next) => {
   req.user
     .populate('cart.items.productId')
     .then((user) => {
@@ -123,7 +128,7 @@ exports.postOrder = (req, res) => {
     });
 };
 
-exports.getOrders = (req, res) => {
+exports.getOrders = (req, res, next) => {
   Order.find({ 'user.userId': req.user._id })
     .then((orders) => {
       res.render('shop/orders', {

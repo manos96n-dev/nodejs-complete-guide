@@ -2,7 +2,7 @@ const { validationResult } = require('express-validator');
 
 const Product = require('../models/product');
 
-exports.getProducts = (req, res) => {
+exports.getProducts = (req, res, next) => {
   Product.find({ userId: req.user._id })
     .then((products) => {
       res.render('admin/products', {
@@ -32,7 +32,7 @@ exports.getAddProduct = (req, res) => {
   });
 };
 
-exports.getEditProduct = (req, res) => {
+exports.getEditProduct = (req, res, next) => {
   const editMode = req.query.edit;
   if (!editMode) {
     return res.redirect('/');
@@ -61,9 +61,9 @@ exports.getEditProduct = (req, res) => {
     });
 };
 
-exports.postAddProduct = (req, res) => {
+exports.postAddProduct = (req, res, next) => {
   const title = req.body.title;
-  const imageUrl = req.body.image;
+  const imageUrl = req.file;
   const description = req.body.description;
   const price = req.body.price;
   const errors = validationResult(req);
@@ -104,7 +104,7 @@ exports.postAddProduct = (req, res) => {
     });
 };
 
-exports.postEditProduct = (req, res) => {
+exports.postEditProduct = (req, res, next) => {
   const prodId = req.body.productId;
   const updatedTitle = req.body.title;
   const updatedPrice = req.body.price;
@@ -150,7 +150,7 @@ exports.postEditProduct = (req, res) => {
     });
 };
 
-exports.postDeleteProduct = (req, res) => {
+exports.postDeleteProduct = (req, res, next) => {
   const prodId = req.body.productId;
   Product.deleteOne({ _id: prodId, userId: req.user._id })
     .then(() => {

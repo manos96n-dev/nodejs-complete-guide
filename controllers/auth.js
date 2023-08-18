@@ -31,7 +31,7 @@ exports.getLogin = (req, res) => {
   });
 };
 
-exports.postLogin = (req, res) => {
+exports.postLogin = (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
   const errors = validationResult(req);
@@ -88,7 +88,7 @@ exports.postLogin = (req, res) => {
     });
 };
 
-exports.postLogout = (req, res) => {
+exports.postLogout = (req, res, next) => {
   req.session.destroy((err) => {
     console.log(err);
     res.redirect('/');
@@ -115,7 +115,7 @@ exports.getSignup = (req, res) => {
   });
 };
 
-exports.postSignup = (req, res) => {
+exports.postSignup = (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
   const confirmPassword = req.body.confirmPassword;
@@ -175,7 +175,7 @@ exports.getReset = (req, res) => {
   });
 };
 
-exports.postReset = (req, res) => {
+exports.postReset = (req, res, next) => {
   crypto.randomBytes(32, (err, buffer) => {
     if (err) {
       console.log(err);
@@ -212,7 +212,7 @@ exports.postReset = (req, res) => {
   });
 };
 
-exports.getNewPasssword = (req, res) => {
+exports.getNewPasssword = (req, res, next) => {
   const token = req.params.token;
   User.findOne({
     resetToken: token,
@@ -240,7 +240,7 @@ exports.getNewPasssword = (req, res) => {
     });
 };
 
-exports.postNewPassword = (req, res) => {
+exports.postNewPassword = (req, res, next) => {
   const newPassword = req.body.password;
   const userId = req.body.userId;
   const passwordToken = req.body.passwordToken;

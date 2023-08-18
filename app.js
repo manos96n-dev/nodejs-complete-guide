@@ -6,6 +6,7 @@ const session = require('express-session');
 const MongoDBStore = require('connect-mongodb-session')(session);
 const csrf = require('csurf');
 const flash = require('connect-flash');
+const multer = require('multer');
 
 const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
@@ -24,10 +25,20 @@ const store = new MongoDBStore({
 
 const csrfProtection = csrf();
 
+const fileStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'images');
+  },
+  filename: (req, file, cb) => {
+    cb(null, new Date().toISOString() + '-' + file.originalname);
+  },
+});
+
 app.set('view engine', 'ejs'); // Compile dynamic templates.
 app.set('views', 'views'); // Sets the location of the templates.
 
 app.use(bodyParser.urlencoded({ extended: false })); // Extracts the data from the form when submit.
+app.use(multer({ dest: 'images', storage: fileStorage }).single('image')); // Initializies multer to allows us the extraction of the image file from the form.
 app.use(express.static(path.join(__dirname, 'public'))); // Sets the public folder for statics files.
 
 // Initialize a session middleware
