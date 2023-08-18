@@ -35,7 +35,7 @@ exports.postLogin = (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
   const errors = validationResult(req);
-  console.log(errors.array());
+
   if (!errors.isEmpty()) {
     return res.status(422).render('auth/login', {
       path: '/login',
