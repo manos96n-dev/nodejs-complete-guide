@@ -61,6 +61,7 @@ app.use(
 );
 
 app.use(express.static(path.join(__dirname, 'public'))); // Sets the public folder for statics files.
+app.use('/images', express.static(path.join(__dirname, 'images'))); // Sets the images folder for statics files.
 
 // Initialize a session middleware
 app.use(
