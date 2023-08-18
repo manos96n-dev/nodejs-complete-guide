@@ -34,11 +34,32 @@ const fileStorage = multer.diskStorage({
   },
 });
 
+const fileFilter = (req, file, cb) => {
+  if (
+    file.mimetype === 'image/png' ||
+    file.mimetype === 'image/jpg' ||
+    file.mimetype === 'image/jpeg'
+  ) {
+    cb(null, true);
+  } else {
+    cb(null, false);
+  }
+};
+
 app.set('view engine', 'ejs'); // Compile dynamic templates.
 app.set('views', 'views'); // Sets the location of the templates.
 
 app.use(bodyParser.urlencoded({ extended: false })); // Extracts the data from the form when submit.
-app.use(multer({ dest: 'images', storage: fileStorage }).single('image')); // Initializies multer to allows us the extraction of the image file from the form.
+
+// Initializies multer to allows us the extraction of the image file from the form.
+app.use(
+  multer({
+    dest: 'images',
+    storage: fileStorage,
+    fileFilter: fileFilter,
+  }).single('image')
+);
+
 app.use(express.static(path.join(__dirname, 'public'))); // Sets the public folder for statics files.
 
 // Initialize a session middleware
