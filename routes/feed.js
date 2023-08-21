@@ -31,4 +31,14 @@ router.put(
   feedController.updatePost
 );
 
+// DELETE /post/:postId
+router.delete(
+  '/post/:postId',
+  [
+    body('title').trim().isLength({ min: 5 }),
+    body('content').trim().isLength({ min: 5 }),
+  ],
+  feedController.deletePost
+);
+
 module.exports = router;
