@@ -7,6 +7,7 @@ const MongoDBStore = require('connect-mongodb-session')(session);
 const csrf = require('csurf');
 const flash = require('connect-flash');
 const multer = require('multer');
+const helmet = require('helmet');
 
 const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
@@ -47,6 +48,8 @@ const fileFilter = (req, file, cb) => {
 
 app.set('view engine', 'ejs'); // Compile dynamic templates.
 app.set('views', 'views'); // Sets the location of the templates.
+
+app.use(helmet()); // Settings secure response headers
 
 app.use(bodyParser.urlencoded({ extended: false })); // Extracts the data from the form when submit.
 
