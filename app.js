@@ -1,3 +1,4 @@
+const fs = require('fs');
 const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -8,6 +9,8 @@ const csrf = require('csurf');
 const flash = require('connect-flash');
 const multer = require('multer');
 const helmet = require('helmet');
+const compression = require('compression');
+const morgan = require('morgan');
 
 const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
@@ -49,7 +52,15 @@ const fileFilter = (req, file, cb) => {
 app.set('view engine', 'ejs'); // Compile dynamic templates.
 app.set('views', 'views'); // Sets the location of the templates.
 
+// Create a log file with login information which getting from morgan
+const accessLogStream = fs.createWriteStream(
+  path.join(__dirname, 'access.log'),
+  { flags: 'a' }
+);
+
 app.use(helmet()); // Settings secure response headers
+app.use(compression()); // Compress the code assets of the application
+app.use(morgan('combined', { stream: accessLogStream })); // Display loging information
 
 app.use(bodyParser.urlencoded({ extended: false })); // Extracts the data from the form when submit.
 

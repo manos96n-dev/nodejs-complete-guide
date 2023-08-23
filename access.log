@@ -1,0 +1,4 @@
+::1 - - [23/Aug/2023:18:21:54 +0000] "GET /products/64e1134155aadf7f0e8cdb42 HTTP/1.1" 200 - "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36"
+::1 - - [23/Aug/2023:18:21:54 +0000] "GET /css/main.css HTTP/1.1" 304 - "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36"
+::1 - - [23/Aug/2023:18:21:54 +0000] "GET /images/2023-08-19T19:08:48.775Z-banner.jpeg HTTP/1.1" 304 - "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36"
+::1 - - [23/Aug/2023:18:21:54 +0000] "GET /js/main.js HTTP/1.1" 304 - "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36"
