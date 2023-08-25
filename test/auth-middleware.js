@@ -1,6 +1,6 @@
 const expect = require('chai').expect;
-const jwt = require('jsonwebtoken');
 const sinon = require('sinon');
+const jwt = require('jsonwebtoken');
 
 const authMiddleware = require('../middleware/is-auth');
 
