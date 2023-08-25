@@ -7,6 +7,7 @@ router.get('/', (req, res, next) => {
     res.status(200).json({ todos: todos });
 });
 router.post('/todo', (req, res, next) => {
+    const body = req.body;
     const newTodo = {
         id: new Date().toISOString(),
         text: req.body.text,
@@ -15,6 +16,7 @@ router.post('/todo', (req, res, next) => {
     res.status(201).json({ message: 'Added todo.', todo: newTodo, todos: todos });
 });
 router.put('/todo/:todoId', (req, res, next) => {
+    const body = req.body;
     const tid = req.params.todoId;
     const todoIndex = todos.findIndex((todoItem) => todoItem.id === tid);
     if (todoIndex >= 0) {
