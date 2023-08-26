@@ -1,4 +1,9 @@
-Deno.serve(
-  { port: 3000, hostname: '0.0.0.0' },
-  (_req) => new Response('Hello, world')
-);
+import { Application } from 'https://deno.land/x/oak@v12.6.0/mod.ts';
+
+const app = new Application();
+
+app.use((ctx) => {
+  ctx.response.body = 'Hello World!';
+});
+
+await app.listen({ port: 8000 });
